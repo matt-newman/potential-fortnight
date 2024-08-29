@@ -49,15 +49,34 @@ const mockDataShape = {
 
 export function Calendar(props: CalendarProps) {
     const { streak_length: streak, calendar } = props.data;
+
+    // to put days into a grid, day of month % 7
+    // grid size is calender length 
+
     return (
         <div className="Calendar">
             Calendar
             <h1 className='title'>{streak} day streak</h1>
 
             {/* Calendar grid based on month... current? */}
-            {calendar.map(day => {
-                return renderDay(day);
-            })}
+            <table>
+                <thead>
+                    <tr>
+                        <th>Mon</th>
+                        <th>Tue</th>
+                        <th>Wed</th>
+                        <th>Thu</th>
+                        <th>Fri</th>
+                        <th>Sat</th>
+                        <th>Sun</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {/* for every 7 days close row open a new one */}
+                </tbody>
+            </table>
+
+            
         </div>
     );
 }
