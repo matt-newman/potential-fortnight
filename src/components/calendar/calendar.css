@@ -2,9 +2,15 @@
     background-color: #fff;
     border-radius: 30px;
     border: solid 1px #ccc;
-    max-width: 570px; /* 80 * 7 */
+    max-width: fit-content;
     margin: 2em auto;
     padding: 1em 2em;
+}
+
+.header {
+    color: #444;
+    padding-bottom: 1em;
+    padding-top: 1em;
 }
 
 .headerDay {
@@ -13,16 +19,21 @@
     text-align: center;
 }
 
+.days {
+    max-width: 602px;
+}
+
 .day {
     border-radius: 50%;
     display: inline-block;
     height: 80px;
     width: 80px;
     overflow: hidden;
+    margin: 3px;
 }
 
 .day.day--empty {
-    background-color: #ccc;
+    background-color: #eee;
 }
 
 .day.day--hot {

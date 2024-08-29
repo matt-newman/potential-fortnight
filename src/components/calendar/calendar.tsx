@@ -47,33 +47,31 @@ const mockDataShape = {
     images: [],
 };
 
+const emptyDay = {
+    streak_type: 'empty',
+    date: '',
+};
+
 export function Calendar(props: CalendarProps) {
     const { streak_length: streak, calendar } = props.data;
-
-    const emptyDay = {
-        streak_type: 'empty',
-        date: '',
-    };
 
     // potentially need to sort calender array by date, which is easy if needed:
     const sortByDate = (a: string, b: string) => {
         return (new Date(a).valueOf() - new Date(b).valueOf());
     }
 
-    function getMaxDaysInMonth (month: number, year=new Date().getFullYear()) {
-        return new Date(year, month, 0).getDate();
-    }
-
-    function getFirstDayOfMonth (month: number, year=new Date().getFullYear()) {
-        return new Date(year, month, 0).getDay();
-    }
-
     const firstDay = calendar[0];
+    const lastDay = calendar.slice().pop();
     const firstDate = new Date(firstDay.date);
+    const lastDate = new Date(lastDay!.date);
+
     const maxDaysInMonth = getMaxDaysInMonth(firstDate.getMonth())
     const firstDayOfMonth = getFirstDayOfMonth(firstDate.getMonth());
+
     const gapFromMonToFirstDay = firstDayOfMonth - 1;
     const gapFromLastDayToSun = (maxDaysInMonth % 6);
+
+    // const gapFromLastEntryToSun = ();
 
     // to put days into a grid, day of month % 7
     // grid size is calender length 
@@ -93,7 +91,7 @@ export function Calendar(props: CalendarProps) {
 
             {/* make the gird 5 rows regardless */}
 
-            <div>
+            <div className='header'>
                 <span className="headerDay">Mon</span>
                 <span className="headerDay">Tue</span>
                 <span className="headerDay">Wed</span>
@@ -102,8 +100,9 @@ export function Calendar(props: CalendarProps) {
                 <span className="headerDay">Sat</span>
                 <span className="headerDay">Sun</span>
             </div>
-            <div>
+            <div className='days'>
                 {/* render empty days at start */}
+
 
 
                 {fullCal.map((day, index) => {
@@ -127,11 +126,41 @@ function renderDay(day: CalendarDay, index: number) {
     return (
         <>
             {isValidDay && (
-                <div className={`day day--${fallbackType}`}>
-                    {dayNum}<br />
-                    getDay = {date.getDay()}<br />
-                </div>
+                <div className={`day day--${fallbackType}`}></div>
             )}
         </>
     )
+}
+
+const getMonthInfo = (month: number, year=new Date().getFullYear()) => {
+    const date = new Date(year, month, 0);
+    const daysInMonth = date.getDate();
+    const firstDayOfMonth = date.getDay();
+
+    return {
+        date,
+        daysInMonth,
+        firstDayOfMonth,
+    }
+}
+
+const createGridForMonth = (month: number, year=new Date().getFullYear()) => {
+    const date = new Date(year, month, 0);
+    const daysInMonth = date.getDate();
+    const firstDayOfMonth = date.getDay();
+
+    const gridSize = 7 * 5; // will be able to fit any month
+    const grid = new Array(gridSize).fill(emptyDay);
+
+    return {
+        grid,
+    };
+}
+
+const getMaxDaysInMonth = (month: number, year=new Date().getFullYear()) => {
+    return new Date(year, month, 0).getDate();
+}
+
+const getFirstDayOfMonth = (month: number, year=new Date().getFullYear()) => {
+    return new Date(year, month, 0).getDay();
 }

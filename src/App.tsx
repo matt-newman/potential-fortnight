@@ -19,11 +19,11 @@ function App() {
         date: addDaysToDate(today, -5).toISOString(),
       },
       {
-        streak_type: 'hot',
+        streak_type: 'mid',
         date: addDaysToDate(today, -4).toISOString(),
       },
       {
-        streak_type: 'hot',
+        streak_type: 'freeze',
         date: addDaysToDate(today, -3).toISOString(),
       },
       {
@@ -33,18 +33,6 @@ function App() {
       {
         streak_type: 'hot',
         date: addDaysToDate(today, -1).toISOString(),
-      },
-      {
-        streak_type: 'mid',
-        date: addDaysToDate(today, 0).toISOString(),
-      },
-      {
-        streak_type: 'freeze',
-        date: addDaysToDate(today, 1).toISOString(),
-      },
-      {
-        streak_type: 'freeze',
-        date: addDaysToDate(today, 2).toISOString(),
       },
     ],
     images: [],
