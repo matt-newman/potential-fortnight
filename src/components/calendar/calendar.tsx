@@ -60,13 +60,13 @@ export function Calendar(props: CalendarProps) {
 
             {/* Calendar grid based on month... current? */}
             <div>
-                <span>Mon</span>
-                <span>Tue</span>
-                <span>Wed</span>
-                <span>Thu</span>
-                <span>Fri</span>
-                <span>Sat</span>
-                <span>Sun</span>
+                <span className="headerDay">Mon</span>
+                <span className="headerDay">Tue</span>
+                <span className="headerDay">Wed</span>
+                <span className="headerDay">Thu</span>
+                <span className="headerDay">Fri</span>
+                <span className="headerDay">Sat</span>
+                <span className="headerDay">Sun</span>
             </div>
             <div>
                 {/* for every 7 days close row open a new one */}
@@ -82,36 +82,13 @@ function renderDay(day: CalendarDay, index: number) {
     const { date: strDate, streak_type: type } = day;
     const date = new Date(strDate);
 
-    let leadingMarkup = '';
-    let newRow = '';
-    let closeRow = '';
     const dayNum = date.getDay();
-    let i = index * 1;
-
-    // // is index 0
-    // if (index === 0 && dayNum > 0) {
-    //     leadingMarkup += '<tr>';
-    //     while (i++ < dayNum) {
-    //         leadingMarkup += '<td></td>';
-    //     }
-    // }
-
-    // // if ( date.getDay() % 7 === 0 ) {
-    // //     newRow = '<tr>';
-    // // }
 
     return (
         <>
-            <div>
-                {strDate}<br />
-                <img src={`./images/${type}.png`} />
+            <div className='day'>
+                {type && <img className='dayImage' src={`./images/${type}.png`} />}
             </div>
         </>
-    )
-}
-
-function emptyCell() {
-    return (
-        <td></td>
     )
 }

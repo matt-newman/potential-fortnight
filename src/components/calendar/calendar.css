@@ -1,3 +1,18 @@
 .calendar {
     background-color: #eee;
 }
+
+.headerDay {
+    display: inline-block;
+    width: 80px;
+    text-align: center;
+}
+
+.day {
+    border-radius: 5px;
+    display: inline-block;
+    width: 80px;
+}
+
+.dayImage { 
+}
