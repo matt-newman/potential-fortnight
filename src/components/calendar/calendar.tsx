@@ -49,6 +49,8 @@ export function Calendar(props: CalendarProps) {
         return (new Date(a).valueOf() - new Date(b).valueOf());
     }
 
+    const grid = createGrid(calendar);
+
     // const firstDay = calendar[0];
     // const lastDay = calendar.slice().pop();
     // const firstDate = new Date(firstDay.date);
@@ -75,10 +77,6 @@ export function Calendar(props: CalendarProps) {
         <div className="calendar">
             <h1 className='title'>{streak || 0} day streak</h1>
 
-            {/* Calendar grid based on month... current? */}
-
-            {/* make the gird 5 rows regardless */}
-
             <div className='header'>
                 <span className="headerDay">Mon</span>
                 <span className="headerDay">Tue</span>
@@ -89,13 +87,9 @@ export function Calendar(props: CalendarProps) {
                 <span className="headerDay">Sun</span>
             </div>
             <div className='days'>
-                {/* render empty days at start */}
-
-                {calendar.map((day, index) => {
+                {grid.map((day, index) => {
                     return renderDay(day, index);
                 })}
-
-                {/* empty days at end */}
             </div>
         </div >
     );
@@ -132,23 +126,17 @@ const getMonthInfo = (month: number, year=new Date().getFullYear()) => {
     }
 }
 
-const createGridForMonth = (month: number, year=new Date().getFullYear()) => {
-    const date = new Date(year, month, 0);
-    const daysInMonth = date.getDate();
-    const firstDayOfMonth = date.getDay();
-
+const createGrid = (days: Array<CalendarDay>): Array<CalendarDay> => {
+    const firstDate = new Date(days[0].date);    
     const gridSize = 7 * 5; // will be able to fit any month
-    const grid = new Array(gridSize).fill(emptyDay);
+    let grid = new Array(gridSize).fill(emptyDay);
 
-    return {
-        grid,
-    };
-}
+    const shiftFromMondayToFirstDate = (firstDate.getDay() + 6) % 7; // effectively resets the zero index of the week to be 1, therefore monday
 
-const getMaxDaysInMonth = (month: number, year=new Date().getFullYear()) => {
-    return new Date(year, month, 0).getDate();
-}
+    // splice days into grid
+    grid.splice(shiftFromMondayToFirstDate + firstDate.getDate(), days.length, ...days);
 
-const getFirstDayOfMonth = (month: number, year=new Date().getFullYear()) => {
-    return new Date(year, month, 0).getDay();
+    console.log( {shiftFromMondayToFirstDate, grid} );
+
+    return grid;
 }
