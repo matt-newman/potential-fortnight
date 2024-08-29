@@ -1,6 +1,10 @@
 .calendar {
-    background-color: #eee;
+    background-color: #fff;
+    border-radius: 30px;
+    border: solid 1px #ccc;
     max-width: 570px; /* 80 * 7 */
+    margin: 2em auto;
+    padding: 1em 2em;
 }
 
 .headerDay {

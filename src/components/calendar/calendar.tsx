@@ -69,9 +69,7 @@ export function Calendar(props: CalendarProps) {
     }
 
     const firstDay = calendar[0];
-    const lastDay = calendar.slice().pop();
     const firstDate = new Date(firstDay.date);
-    const lastDate = new Date(lastDay.date);
     const maxDaysInMonth = getMaxDaysInMonth(firstDate.getMonth())
     const firstDayOfMonth = getFirstDayOfMonth(firstDate.getMonth());
     const gapFromMonToFirstDay = firstDayOfMonth - 1;
