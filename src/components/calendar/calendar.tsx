@@ -31,7 +31,7 @@ const mockDataShape = {
         }
     ],
     images: [],
-}
+};
 
 export function Calendar() {
   return (
