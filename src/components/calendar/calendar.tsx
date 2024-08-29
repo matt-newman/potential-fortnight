@@ -102,12 +102,16 @@ function renderDay(day: CalendarDay, index: number) {
     const dayNum = date.getDate();
     const isValidDay = dayNum > -1 || type === 'empty';
     const fallbackType = type || 'empty';
+    const today = new Date();
+    const todayOffset = (today.getDay() + 6) % 7; // to make monday 0
+    const isToday = (today.getDate() + todayOffset) === index + 1; // index + 1, due to shift of insertAt
 
     return (
         <>
             {isValidDay && (
-                <div className={`day day--${fallbackType}`}>
-                    {isValidDay && type !== 'empty' && (<img className={''} alt={`${type}`} src={`/images/${type}.png`} />)}
+                <div className={`day day--${fallbackType} ${isToday ? 'day--today' : ''}`}>
+                    {/* {today.getDate()} - {todayOffset} - {index} */}
+                    {isValidDay && type !== 'empty' && (<img className={'day-image'} alt={`${type}`} src={`/images/${type}.png`} />)}
                 </div>
             )}
         </>
@@ -115,14 +119,18 @@ function renderDay(day: CalendarDay, index: number) {
 }
 
 const getMonthInfo = (month: number, year=new Date().getFullYear()) => {
-    const date = new Date(year, month, 0);
-    const daysInMonth = date.getDate();
-    const firstDayOfMonth = date.getDay();
+    const first = new Date(year, month, 1);
+    const last = new Date(year, month + 1, 0);
+    const daysInMonth = last.getDate();
+    const firstDayOfMonth = first.getDay();
+    const shiftFromMondayToFirstDayOfMonth = ( firstDayOfMonth + 6 ) % 7; // effectively resets the zero index of the week to be 1, therefore monday
 
     return {
-        date,
+        first,
+        last,
         daysInMonth,
         firstDayOfMonth,
+        shiftFromMondayToFirstDayOfMonth,
     }
 }
 
@@ -131,12 +139,13 @@ const createGrid = (days: Array<CalendarDay>): Array<CalendarDay> => {
     const gridSize = 7 * 5; // will be able to fit any month
     let grid = new Array(gridSize).fill(emptyDay);
 
-    const shiftFromMondayToFirstDate = (firstDate.getDate() + 6) % 7; // effectively resets the zero index of the week to be 1, therefore monday
+    const month = getMonthInfo(firstDate.getMonth(), firstDate.getFullYear());
+    const insertAt = month.shiftFromMondayToFirstDayOfMonth + firstDate.getDate() - 1; // -1 because of zero index of array
 
     // splice days into grid
-    grid.splice(shiftFromMondayToFirstDate + firstDate.getDate(), days.length, ...days);
+    grid.splice(insertAt, days.length, ...days);
 
-    console.log( {shiftFromMondayToFirstDate, grid, first: firstDate.getDate()} );
+    console.log( {insertAt, grid, first: firstDate.getDate(), month} );
 
     return grid;
 }
