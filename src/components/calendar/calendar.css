@@ -1,5 +1,6 @@
 .calendar {
     background-color: #eee;
+    max-width: 570px; /* 80 * 7 */
 }
 
 .headerDay {
@@ -9,11 +10,26 @@
 }
 
 .day {
-    border-radius: 5px;
+    border-radius: 50%;
     display: inline-block;
     height: 80px;
     width: 80px;
     overflow: hidden;
+}
+
+.day.day--empty {
+    background-color: #ccc;
+}
+
+.day.day--hot {
+    background-image: url('../../../public/images/hot.png');
+}
+.day.day--mid {
+    background-image: url('../../../public/images/mid.png');
+}
+.day.day--freeze {
+    border-radius: 10px;
+    background-image: url('../../../public/images/freeze.png');
 }
 
 .dayImage { 

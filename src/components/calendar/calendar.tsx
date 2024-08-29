@@ -50,15 +50,51 @@ const mockDataShape = {
 export function Calendar(props: CalendarProps) {
     const { streak_length: streak, calendar } = props.data;
 
+    const emptyDay = {
+        streak_type: 'empty',
+        date: '',
+    };
+
+    // potentially need to sort calender array by date, which is easy if needed:
+    const sortByDate = (a: string, b: string) => {
+        return (new Date(a).valueOf() - new Date(b).valueOf());
+    }
+
+    function getMaxDaysInMonth (month: number, year=new Date().getFullYear()) {
+        return new Date(year, month, 0).getDate();
+    }
+
+    function getFirstDayOfMonth (month: number, year=new Date().getFullYear()) {
+        return new Date(year, month, 0).getDay();
+    }
+
+    const firstDay = calendar[0];
+    const lastDay = calendar.slice().pop();
+    const firstDate = new Date(firstDay.date);
+    const lastDate = new Date(lastDay.date);
+    const maxDaysInMonth = getMaxDaysInMonth(firstDate.getMonth())
+    const firstDayOfMonth = getFirstDayOfMonth(firstDate.getMonth());
+    const gapFromMonToFirstDay = firstDayOfMonth - 1;
+    const gapFromLastDayToSun = (maxDaysInMonth % 6);
+
     // to put days into a grid, day of month % 7
     // grid size is calender length 
+    const startGap = new Array(gapFromMonToFirstDay).fill(emptyDay);
+    const emptyStarts = new Array(firstDate.getDate()).fill(emptyDay); // % 7 + 1 to start from monday
+
+    const endGap = new Array(gapFromLastDayToSun).fill(emptyDay);
+
+    const fullCal = [...startGap, ...emptyStarts, ...calendar, ...endGap];
 
     return (
-        <div className="Calendar">
+        <div className="calendar">
             Calendar
             <h1 className='title'>{streak} day streak</h1>
 
             {/* Calendar grid based on month... current? */}
+
+            {/* make the gird 5 rows regardless */}
+
             <div>
                 <span className="headerDay">Mon</span>
                 <span className="headerDay">Tue</span>
@@ -69,10 +105,14 @@ export function Calendar(props: CalendarProps) {
                 <span className="headerDay">Sun</span>
             </div>
             <div>
-                {/* for every 7 days close row open a new one */}
-                {calendar.map((day, index) => {
+                {/* render empty days at start */}
+
+
+                {fullCal.map((day, index) => {
                     return renderDay(day, index);
                 })}
+
+                {/* empty days at end */}
             </div>
         </div >
     );
@@ -82,13 +122,18 @@ function renderDay(day: CalendarDay, index: number) {
     const { date: strDate, streak_type: type } = day;
     const date = new Date(strDate);
 
-    const dayNum = date.getDay();
+    const dayNum = date.getDate();
+    const isValidDay = dayNum > -1 || type === 'empty';
+    const fallbackType = type || 'empty';
 
     return (
         <>
-            <div className='day'>
-                {type && <img className='dayImage' src={`./images/${type}.png`} />}
-            </div>
+            {isValidDay && (
+                <div className={`day day--${fallbackType}`}>
+                    {dayNum}<br />
+                    getDay = {date.getDay()}<br />
+                </div>
+            )}
         </>
     )
 }
