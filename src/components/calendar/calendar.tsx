@@ -4,10 +4,10 @@ import './calendar.css';
 The data structure you receive: You receive the following data in an object:
 
 streak_length = the number of days streak they’re on
-calendar = a list of Day objects, one for each day in a month
-Each Day object has fields:
-streak_type: the type of streak they got that day, can be None. Different streaks have different images
-date
+    calendar = a list of Day objects, one for each day in a month
+        day:
+            streak_type: the type of streak they got that day, can be None. Different streaks have different images
+            date
 images = a list of all the streak images
 
 {
@@ -48,11 +48,25 @@ const mockDataShape = {
 };
 
 export function Calendar(props: CalendarProps) {
-    const { streak_length: streak } = props.data;
+    const { streak_length: streak, calendar } = props.data;
     return (
         <div className="Calendar">
             Calendar
             <h1 className='title'>{streak} day streak</h1>
+
+            {/* Calendar grid based on month... current? */}
+            {calendar.map(day => {
+                return renderDay(day);
+            })}
         </div>
     );
+}
+
+function renderDay(day: CalendarDay) {
+    return (
+        <>
+            {day.streak_type}<br />
+            {day.date}<br />
+        </>
+    )
 }

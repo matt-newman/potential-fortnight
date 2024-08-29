@@ -8,8 +8,8 @@ function App() {
     streak_length: 1,
     calendar: [
         {
-            streak_type: '',
-            date: '',
+            streak_type: 'hot',
+            date: new Date().toISOString(),
         }
     ],
     images: [],
