@@ -1,0 +1,53 @@
+.day {
+    display: inline-block;
+    height: 70px;
+    width: 70px;
+    overflow: hidden;
+    padding: 5px 15px;
+    margin: 10px 0;
+}
+
+.day--streak {
+    background-color: #FEF5DE;
+}
+
+.day--streak:first-of-type {
+    border-radius: 40px 0 0 40px;
+}
+
+.day--streak:last-of-type {
+    border-radius: 0 40px 40px 0;
+}
+
+.day.week-start {
+    border-radius: 40px 0 0 40px;
+}
+
+.day.week-end {
+    border-radius: 0 40px 40px 0;
+}
+
+.day--streak.week-end:first-of-type,
+.day--streak.week-start:last-of-type {
+    border-radius: 40px;
+}
+
+.day--today::after {
+    content: '';
+    display: block;
+    border-radius: 50%;
+    width: 70px;
+    height: 70px;
+    outline: solid 3px black;
+    outline-offset: -3px;
+}
+
+.day-image {
+    border-radius: 50%;
+    max-width: 70px;
+    max-height: 70px;
+}
+
+.day--freeze .day-image {
+    border-radius: 10px;
+}

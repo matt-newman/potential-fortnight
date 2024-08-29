@@ -1,5 +1,8 @@
 import './calendar.css';
 
+import { CalendarDay, Day } from './day';
+import { getMonthInfo } from "../../utils";
+
 /*
 The data structure you receive: You receive the following data in an object:
 
@@ -31,11 +34,6 @@ export type CalendarData = {
     images: Array<string>;
 }
 
-type CalendarDay = {
-    streak_type: string;
-    date: string;
-}
-
 const emptyDay = {
     streak_type: 'empty',
     date: '',
@@ -44,6 +42,22 @@ const emptyDay = {
 export function Calendar(props: CalendarProps) {
     const { streak_length: streak, calendar } = props.data;
 
+    const createGrid = (days: Array<CalendarDay>): Array<CalendarDay> => {
+        const firstDate = new Date(days[0].date);
+        const gridSize = 7 * 5; // will be able to fit any month
+        let grid = new Array(gridSize).fill(emptyDay);
+
+        const month = getMonthInfo(firstDate.getMonth(), firstDate.getFullYear());
+        const insertAt = month.shiftFromMondayToFirstDayOfMonth + firstDate.getDate() - 1; // -1 because of zero index of array
+
+        // splice days into grid
+        grid.splice(insertAt, days.length, ...days);
+
+        // console.log({ insertAt, grid, first: firstDate.getDate(), month });
+
+        return grid;
+    }
+
     // potentially need to sort calender array by date, which is easy if needed:
     const sortByDate = (a: string, b: string) => {
         return (new Date(a).valueOf() - new Date(b).valueOf());
@@ -51,27 +65,9 @@ export function Calendar(props: CalendarProps) {
 
     const grid = createGrid(calendar);
 
-    // const firstDay = calendar[0];
-    // const lastDay = calendar.slice().pop();
-    // const firstDate = new Date(firstDay.date);
-    // const lastDate = new Date(lastDay!.date);
-
-    // const maxDaysInMonth = getMaxDaysInMonth(firstDate.getMonth())
-    // const firstDayOfMonth = getFirstDayOfMonth(firstDate.getMonth());
-
-    // const gapFromMonToFirstDay = firstDayOfMonth - 1;
-    // const gapFromLastDayToSun = (maxDaysInMonth % 6);
-
-    // // const gapFromLastEntryToSun = ();
-
-    // // to put days into a grid, day of month % 7
-    // // grid size is calender length 
-    // const startGap = new Array(gapFromMonToFirstDay).fill(emptyDay);
-    // const emptyStarts = new Array(firstDate.getDate()).fill(emptyDay); // % 7 + 1 to start from monday
-
-    // const endGap = new Array(gapFromLastDayToSun).fill(emptyDay);
-
-    // const fullCal = [...startGap, ...emptyStarts, ...calendar, ...endGap];
+    const days = grid.map((day, index) => {
+        return <Day day={day} index={index} />;
+    })
 
     return (
         <div className="calendar">
@@ -87,72 +83,8 @@ export function Calendar(props: CalendarProps) {
                 <span className="headerDay">Sun</span>
             </div>
             <div className='days'>
-                {grid.map((day, index) => {
-                    return renderDay(day, index);
-                })}
+                {days}
             </div>
         </div >
     );
-}
-
-function renderDay(day: CalendarDay, index: number) {
-    const { date: strDate, streak_type: type } = day;
-    const date = new Date(strDate);
-
-    const dayNum = date.getDate();
-    const isValidDay = dayNum > -1 || type === 'empty';
-    const isEmpty = type === 'empty';
-    const fallbackType = type || 'empty';
-    const today = new Date();
-    const month = getMonthInfo(today.getMonth(), today.getFullYear());
-    const isToday = (month.shiftFromMondayToFirstDayOfMonth + today.getDate() - 1) === index; // getDate() - 1, to shift date to be 0 indexed like array
-    let weekClass = index % 7 === 0 ? ' week-start ' : ''; // start of week
-    weekClass += index % 7 === 6 ? ' week-end ' : ''; // end of week
-
-    return (
-        <>
-            {/* div vs span tweak to allow css :first-of-type selector */}
-            {isEmpty && (
-                <div className={`day day--${fallbackType} ${isToday ? 'day--today' : ''} ${weekClass}`}></div>
-            )}
-            {isValidDay && !isEmpty && (
-                <span className={`day day--${fallbackType} day--streak ${isToday ? 'day--today' : ''} ${weekClass}`}>
-                    {/* {today.getDate()} - {todayOffset} - {index} */}
-                    {isValidDay && type !== 'empty' && (<img className={'day-image'} alt={`${type}`} src={`/images/${type}.png`} />)}
-                </span>
-            )}
-        </>
-    )
-}
-
-const getMonthInfo = (month: number, year=new Date().getFullYear()) => {
-    const first = new Date(year, month, 1);
-    const last = new Date(year, month + 1, 0);
-    const daysInMonth = last.getDate();
-    const firstDayOfMonth = first.getDay();
-    const shiftFromMondayToFirstDayOfMonth = ( firstDayOfMonth + 6 ) % 7; // effectively resets the zero index of the week to be 1, therefore monday
-
-    return {
-        first,
-        last,
-        daysInMonth,
-        firstDayOfMonth,
-        shiftFromMondayToFirstDayOfMonth,
-    }
-}
-
-const createGrid = (days: Array<CalendarDay>): Array<CalendarDay> => {
-    const firstDate = new Date(days[0].date);    
-    const gridSize = 7 * 5; // will be able to fit any month
-    let grid = new Array(gridSize).fill(emptyDay);
-
-    const month = getMonthInfo(firstDate.getMonth(), firstDate.getFullYear());
-    const insertAt = month.shiftFromMondayToFirstDayOfMonth + firstDate.getDate() - 1; // -1 because of zero index of array
-
-    // splice days into grid
-    grid.splice(insertAt, days.length, ...days);
-
-    console.log( {insertAt, grid, first: firstDate.getDate(), month} );
-
-    return grid;
 }
