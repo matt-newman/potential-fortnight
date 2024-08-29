@@ -4,10 +4,10 @@ import './calendar.css';
 The data structure you receive: You receive the following data in an object:
 
 streak_length = the number of days streak they’re on
-    calendar = a list of Day objects, one for each day in a month
-        day:
-            streak_type: the type of streak they got that day, can be None. Different streaks have different images
-            date
+calendar = a list of Day objects, one for each day in a month
+    day:
+        streak_type: the type of streak they got that day, can be None. Different streaks have different images
+        date
 images = a list of all the streak images
 
 {
@@ -84,7 +84,6 @@ export function Calendar(props: CalendarProps) {
 
     return (
         <div className="calendar">
-            Calendar
             <h1 className='title'>{streak} day streak</h1>
 
             {/* Calendar grid based on month... current? */}
@@ -126,7 +125,9 @@ function renderDay(day: CalendarDay, index: number) {
     return (
         <>
             {isValidDay && (
-                <div className={`day day--${fallbackType}`}></div>
+                <div className={`day day--${fallbackType}`}>
+                    {isValidDay && type !== 'empty' && (<img className={''} alt={`${type}`} src={`/images/${type}.png`} />)}
+                </div>
             )}
         </>
     )
