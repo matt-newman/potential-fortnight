@@ -21,6 +21,20 @@ images = a list of all the streak images
     images: [],
 }
 */
+export type CalendarProps = {
+    data: CalendarData;
+}
+
+export type CalendarData = {
+    streak_length: number;
+    calendar: Array<CalendarDay>;
+    images: Array<string>;
+}
+
+type CalendarDay = {
+    streak_type: string;
+    date: string;
+}
 
 const mockDataShape = {
     streak_length: 1,
@@ -33,10 +47,12 @@ const mockDataShape = {
     images: [],
 };
 
-export function Calendar() {
-  return (
-    <div className="Calendar">
-        Calendar
-    </div>
-  );
+export function Calendar(props: CalendarProps) {
+    const { streak_length: streak } = props.data;
+    return (
+        <div className="Calendar">
+            Calendar
+            <h1 className='title'>{streak} day streak</h1>
+        </div>
+    );
 }
