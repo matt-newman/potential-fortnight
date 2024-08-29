@@ -36,17 +36,6 @@ type CalendarDay = {
     date: string;
 }
 
-const mockDataShape = {
-    streak_length: 1,
-    calendar: [
-        {
-            streak_type: '',
-            date: '',
-        }
-    ],
-    images: [],
-};
-
 const emptyDay = {
     streak_type: 'empty',
     date: '',
@@ -60,31 +49,31 @@ export function Calendar(props: CalendarProps) {
         return (new Date(a).valueOf() - new Date(b).valueOf());
     }
 
-    const firstDay = calendar[0];
-    const lastDay = calendar.slice().pop();
-    const firstDate = new Date(firstDay.date);
-    const lastDate = new Date(lastDay!.date);
+    // const firstDay = calendar[0];
+    // const lastDay = calendar.slice().pop();
+    // const firstDate = new Date(firstDay.date);
+    // const lastDate = new Date(lastDay!.date);
 
-    const maxDaysInMonth = getMaxDaysInMonth(firstDate.getMonth())
-    const firstDayOfMonth = getFirstDayOfMonth(firstDate.getMonth());
+    // const maxDaysInMonth = getMaxDaysInMonth(firstDate.getMonth())
+    // const firstDayOfMonth = getFirstDayOfMonth(firstDate.getMonth());
 
-    const gapFromMonToFirstDay = firstDayOfMonth - 1;
-    const gapFromLastDayToSun = (maxDaysInMonth % 6);
+    // const gapFromMonToFirstDay = firstDayOfMonth - 1;
+    // const gapFromLastDayToSun = (maxDaysInMonth % 6);
 
-    // const gapFromLastEntryToSun = ();
+    // // const gapFromLastEntryToSun = ();
 
-    // to put days into a grid, day of month % 7
-    // grid size is calender length 
-    const startGap = new Array(gapFromMonToFirstDay).fill(emptyDay);
-    const emptyStarts = new Array(firstDate.getDate()).fill(emptyDay); // % 7 + 1 to start from monday
+    // // to put days into a grid, day of month % 7
+    // // grid size is calender length 
+    // const startGap = new Array(gapFromMonToFirstDay).fill(emptyDay);
+    // const emptyStarts = new Array(firstDate.getDate()).fill(emptyDay); // % 7 + 1 to start from monday
 
-    const endGap = new Array(gapFromLastDayToSun).fill(emptyDay);
+    // const endGap = new Array(gapFromLastDayToSun).fill(emptyDay);
 
-    const fullCal = [...startGap, ...emptyStarts, ...calendar, ...endGap];
+    // const fullCal = [...startGap, ...emptyStarts, ...calendar, ...endGap];
 
     return (
         <div className="calendar">
-            <h1 className='title'>{streak} day streak</h1>
+            <h1 className='title'>{streak || 0} day streak</h1>
 
             {/* Calendar grid based on month... current? */}
 
@@ -102,9 +91,7 @@ export function Calendar(props: CalendarProps) {
             <div className='days'>
                 {/* render empty days at start */}
 
-
-
-                {fullCal.map((day, index) => {
+                {calendar.map((day, index) => {
                     return renderDay(day, index);
                 })}
 

@@ -34,19 +34,18 @@
 
 .days {
     max-width: 602px;
+    background-image: radial-gradient(circle at 43px 40px, #eee 35px, transparent 0);
+    background-size: 86px;
 }
 
 .day {
+    background-color: #eee;
     border-radius: 50%;
     display: inline-block;
     height: 80px;
     width: 80px;
     overflow: hidden;
     margin: 3px;
-}
-
-.day.day--empty {
-    background-color: #eee;
 }
 
 .day.day--freeze {
