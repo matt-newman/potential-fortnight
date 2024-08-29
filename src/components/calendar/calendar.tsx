@@ -101,18 +101,25 @@ function renderDay(day: CalendarDay, index: number) {
 
     const dayNum = date.getDate();
     const isValidDay = dayNum > -1 || type === 'empty';
+    const isEmpty = type === 'empty';
     const fallbackType = type || 'empty';
     const today = new Date();
-    const todayOffset = (today.getDay() + 6) % 7; // to make monday 0
-    const isToday = (today.getDate() + todayOffset) === index + 1; // index + 1, due to shift of insertAt
+    const month = getMonthInfo(today.getMonth(), today.getFullYear());
+    const isToday = (month.shiftFromMondayToFirstDayOfMonth + today.getDate() - 1) === index; // getDate() - 1, to shift date to be 0 indexed like array
+    let weekClass = index % 7 === 0 ? ' week-start ' : ''; // start of week
+    weekClass += index % 7 === 6 ? ' week-end ' : ''; // end of week
 
     return (
         <>
-            {isValidDay && (
-                <div className={`day day--${fallbackType} ${isToday ? 'day--today' : ''}`}>
+            {/* div vs span tweak to allow css :first-of-type selector */}
+            {isEmpty && (
+                <div className={`day day--${fallbackType} ${isToday ? 'day--today' : ''} ${weekClass}`}></div>
+            )}
+            {isValidDay && !isEmpty && (
+                <span className={`day day--${fallbackType} day--streak ${isToday ? 'day--today' : ''} ${weekClass}`}>
                     {/* {today.getDate()} - {todayOffset} - {index} */}
                     {isValidDay && type !== 'empty' && (<img className={'day-image'} alt={`${type}`} src={`/images/${type}.png`} />)}
-                </div>
+                </span>
             )}
         </>
     )
