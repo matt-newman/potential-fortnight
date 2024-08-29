@@ -131,12 +131,12 @@ const createGrid = (days: Array<CalendarDay>): Array<CalendarDay> => {
     const gridSize = 7 * 5; // will be able to fit any month
     let grid = new Array(gridSize).fill(emptyDay);
 
-    const shiftFromMondayToFirstDate = (firstDate.getDay() + 6) % 7; // effectively resets the zero index of the week to be 1, therefore monday
+    const shiftFromMondayToFirstDate = (firstDate.getDate() + 6) % 7; // effectively resets the zero index of the week to be 1, therefore monday
 
     // splice days into grid
     grid.splice(shiftFromMondayToFirstDate + firstDate.getDate(), days.length, ...days);
 
-    console.log( {shiftFromMondayToFirstDate, grid} );
+    console.log( {shiftFromMondayToFirstDate, grid, first: firstDate.getDate()} );
 
     return grid;
 }
