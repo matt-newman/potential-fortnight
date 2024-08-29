@@ -59,39 +59,59 @@ export function Calendar(props: CalendarProps) {
             <h1 className='title'>{streak} day streak</h1>
 
             {/* Calendar grid based on month... current? */}
-            <table>
-                <thead>
-                    <tr>
-                        <th>Mon</th>
-                        <th>Tue</th>
-                        <th>Wed</th>
-                        <th>Thu</th>
-                        <th>Fri</th>
-                        <th>Sat</th>
-                        <th>Sun</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {/* for every 7 days close row open a new one */}
-                    {calendar.map(day => {
-                        return renderDay(day);
-                    })} 
-                </tbody>
-            </table>
-
-            
-        </div>
+            <div>
+                <span>Mon</span>
+                <span>Tue</span>
+                <span>Wed</span>
+                <span>Thu</span>
+                <span>Fri</span>
+                <span>Sat</span>
+                <span>Sun</span>
+            </div>
+            <div>
+                {/* for every 7 days close row open a new one */}
+                {calendar.map((day, index) => {
+                    return renderDay(day, index);
+                })}
+            </div>
+        </div >
     );
 }
 
-function renderDay(day: CalendarDay) {
+function renderDay(day: CalendarDay, index: number) {
     const { date: strDate, streak_type: type } = day;
     const date = new Date(strDate);
 
+    let leadingMarkup = '';
+    let newRow = '';
+    let closeRow = '';
+    const dayNum = date.getDay();
+    let i = index * 1;
+
+    // // is index 0
+    // if (index === 0 && dayNum > 0) {
+    //     leadingMarkup += '<tr>';
+    //     while (i++ < dayNum) {
+    //         leadingMarkup += '<td></td>';
+    //     }
+    // }
+
+    // // if ( date.getDay() % 7 === 0 ) {
+    // //     newRow = '<tr>';
+    // // }
+
     return (
         <>
-            {strDate}<br />
-            {type}<br />
+            <div>
+                {strDate}<br />
+                <img src={`./images/${type}.png`} />
+            </div>
         </>
+    )
+}
+
+function emptyCell() {
+    return (
+        <td></td>
     )
 }
