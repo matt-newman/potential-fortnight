@@ -73,6 +73,9 @@ export function Calendar(props: CalendarProps) {
                 </thead>
                 <tbody>
                     {/* for every 7 days close row open a new one */}
+                    {calendar.map(day => {
+                        return renderDay(day);
+                    })} 
                 </tbody>
             </table>
 
@@ -82,10 +85,13 @@ export function Calendar(props: CalendarProps) {
 }
 
 function renderDay(day: CalendarDay) {
+    const { date: strDate, streak_type: type } = day;
+    const date = new Date(strDate);
+
     return (
         <>
-            {day.streak_type}<br />
-            {day.date}<br />
+            {strDate}<br />
+            {type}<br />
         </>
     )
 }
