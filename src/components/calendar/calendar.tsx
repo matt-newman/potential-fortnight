@@ -1,7 +1,7 @@
 import './calendar.css';
 
 import { CalendarDay, Day } from './day';
-import { getMonthInfo } from "../../utils";
+import { getMonthInfo, getWeekDays } from "../../utils";
 
 /*
 The data structure you receive: You receive the following data in an object:
@@ -41,6 +41,7 @@ const emptyDay = {
 
 export function Calendar(props: CalendarProps) {
     const { streak_length: streak, calendar } = props.data;
+    const weekDays = getWeekDays();
 
     const createGrid = (days: Array<CalendarDay>): Array<CalendarDay> => {
         const firstDate = new Date(days[0].date);
@@ -49,11 +50,11 @@ export function Calendar(props: CalendarProps) {
 
         const month = getMonthInfo(firstDate.getMonth(), firstDate.getFullYear());
         const insertAt = month.shiftFromMondayToFirstDayOfMonth + firstDate.getDate() - 1; // -1 because of zero index of array
-
+        
         // splice days into grid
         grid.splice(insertAt, days.length, ...days);
 
-        // console.log({ insertAt, grid, first: firstDate.getDate(), month });
+        // console.log({ insertAt, grid, first: firstDate.getDate(), month, weekDays });
 
         return grid;
     }
@@ -66,7 +67,7 @@ export function Calendar(props: CalendarProps) {
     const grid = createGrid(calendar);
 
     const days = grid.map((day, index) => {
-        return <Day day={day} index={index} />;
+        return <Day key={index} day={day} index={index} />;
     })
 
     return (
@@ -74,13 +75,9 @@ export function Calendar(props: CalendarProps) {
             <h1 className='title'>{streak || 0} day streak</h1>
 
             <div className='header'>
-                <span className="headerDay">Mon</span>
-                <span className="headerDay">Tue</span>
-                <span className="headerDay">Wed</span>
-                <span className="headerDay">Thu</span>
-                <span className="headerDay">Fri</span>
-                <span className="headerDay">Sat</span>
-                <span className="headerDay">Sun</span>
+                {weekDays.map((day, index) => {
+                    return (<span key={index} className="headerDay">{day}</span>)
+                })}
             </div>
             <div className='days'>
                 {days}
